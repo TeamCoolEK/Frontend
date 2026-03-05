@@ -31,4 +31,18 @@ async function createMovie() {
     })
     if (response.ok) {
         alert('Film oprettet');
-   
+        closePopup();
+        getMovies(); //Opdaterer listen med film
+    } else {
+        alert('Noget gik galt. Prøv igen.');
+    }
+
+
+
+    // Luk popup ved at klikke udenfor popuppen
+    document.getElementById('overlay').addEventListener('click', function(e) {
+        if (e.target === this) closePopup();
+    });
+
+
+}
