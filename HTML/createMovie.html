@@ -6,4 +6,52 @@
 </head>
 <body>
 
-<!-- Overlay er
+<!-- Overlay er det mørkelag bag pop uppen :) -->
+<div class="overlay" id="overlay">
+    <div class="popupboks">
+        <h2>Opret ny film</h2>
+
+        <div class="form-group">
+            <label for="title">Titel</label>
+            <input type="text" id="title" placeholder="f.eks. Barbie" maxlength="50">
+        </div>
+
+        <div class="form-group">
+            <label for="category">Kategori</label>
+            <select id="category">
+                <option value="">– Vælg –</option>
+                <option value="Action">Action</option>
+                <option value="Drama">Drama</option>
+                <option value="Komedie">Komedie</option>
+                <option value="Thriller">Thriller</option>
+                <option value="Animation">Animation</option>
+                <option value="Horror">Horror</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="ageLimit">Aldersgrænse</label>
+            <select id="ageLimit">
+                <option value="">– Vælg –</option>
+                <option value="Alle">Alle aldre</option>
+                <option value="7+">7+</option>
+                <option value="11+">11+</option>
+                <option value="15+">15+</option>
+                <option value="18+">18+</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="duration">Varighed (minutter)</label>
+            <input type="number" id="duration" placeholder="f.eks. 120" min="1" max="999">
+        </div>
+
+        <div class="popup-footer">
+            <button class="btn-cancel" onclick="closePopup()">Annullér</button>
+            <button class="btn-submit" onclick="createMovie()">Opret film</button>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="../js/CreateMovie.js"></script>
+</html>
