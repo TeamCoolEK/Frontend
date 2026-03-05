@@ -31,4 +31,3 @@ async function createMovie() {
     })
     if (response.ok) {
         alert('Film oprettet');
-   
