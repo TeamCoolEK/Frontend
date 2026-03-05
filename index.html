@@ -3,8 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
+  <link rel="stylesheet" href="css/style.css">
+
 </head>
 <body>
-<h1>Vores første index på vores server! test test</h1>
+<!-- nav bar -->
+<nav class="navbar">
+  <div class="navbar-left">
+    <a href="/dashboard" class="logo">CoolPlanner</a>
+  </div>
+
+  <div class="navbar-right">
+    <a href="/admin/login" class="admin-login">Admin login</a>
+  </div>
+</nav>
+
+<header>
+  <div class="menu">☰</div>
+  <h1>Cool Cinema</h1>
+</header>
+
+<!-- date selector til java script -->
+<main>
+  <div class="date-selector">
+    <button id="prevDay">&lt;</button>
+    <span id="currentDate"></span>
+    <button id="nextDay">&gt;</button>
+  </div>
+  <div id="movie-container"></div>
+</main>
+
+<footer>
+  <p>Cinema Cool</p>
+  <p>Old Cool Street 100, 2200 Copenhagen</p>
+  <p>Phone: Woulnd't you like to know</p>
+</footer>
+<script src="js/app.js"></script>
 </body>
 </html>
