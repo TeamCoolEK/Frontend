@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>Sædereservation</title>
+</head>
+<body>
+
+<h1>Sædereservation</h1>
+
+<label for="showingId">Showing ID:</label>
+<input id="showingId" type="number">
+<button id="btnLoadSeats">Hent ledige sæder</button>
+
+<p id="statusText"></p>
+
+<h2>Ledige sæder</h2>
+<div id="seatGrid"></div>
+
+<p>
+  Valgte sæder:
+  <span id="selectedSeatsText">Ingen</span>
+</p>
+
+<button id="btnCreateReservation" disabled>Create Reservation</button>
+
+<p id="resultMessage"></p>
+
+<script src="js/seat-reservation.js"></script>
+
+</body>
+</html>
