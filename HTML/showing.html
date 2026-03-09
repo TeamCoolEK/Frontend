@@ -7,16 +7,8 @@
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="navbar-left">
-    <a href="#" class="logo">Kino</a>
-  </div>
-  <div class="navbar-right">
-    <a href="#">Forside</a>
-    <a href="#">Program</a>
-    <a href="#">Reservationer</a>
-  </div>
-</nav>
+<!-- header fragment -->
+<div id="header-container"></div>
 
 <main>
   <h1>Sædereservation</h1>
@@ -48,10 +40,6 @@
   <p id="resultMessage"></p>
 </main>
 
-<footer>
-  <p>Kino system</p>
-</footer>
-
 <div id="confirmationPopup" class="overlay">
   <div class="popupboks">
     <h2>Reservation bekræftet</h2>
@@ -65,6 +53,11 @@
     </div>
   </div>
 </div>
+
+<div id="footer-container"></div>
+
+<!-- JS scripts -->
+<script src="/js/fragments.js"></script>
 
 <script src="../js/seat-reservation.js"></script>
 </body>

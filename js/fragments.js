@@ -4,5 +4,5 @@ async function loadFragment(id, url) {
     document.getElementById(id).innerHTML = text;
 }
 //loader header/footer på alle sider
-loadFragment("header-container", "HTML/fragments/header.html");
-loadFragment("footer-container", "HTML/fragments/footer.html");
+loadFragment("header-container", "fragments/header.html");
+loadFragment("footer-container", "fragments/footer.html");
