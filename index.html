@@ -2,9 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- tlf. venlig-->
+  <title>Cinema Cool</title>
+  <link rel="stylesheet" href="css/style.css">
+
+
 </head>
 <body>
-<h1>Vores første index på vores server! test test</h1>
+<!-- header fragment -->
+<div id="header-container"></div>
+
+<!-- main content - date selector til JS -->
+<main>
+  <div class="date-selector">
+    <button id="prevDay">&lt;</button>
+    <span id="currentDate"></span>
+    <button id="nextDay">&gt;</button>
+  </div>
+  <div id="movie-container"></div>
+</main>
+
+<!-- footer fragment -->
+<div id="footer-container"></div>
+
+<!-- JS scripts -->
+<script src="js/fragments.js"></script>
+<script src="js/app.js"></script>
+
 </body>
 </html>
