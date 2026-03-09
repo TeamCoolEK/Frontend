@@ -13,8 +13,8 @@ async function getMovies() {
 async function createMovie() {
     const title = document.getElementById('title').value;
     const category = document.getElementById('category').value;
-    const ageLimit = document.getElementById('ageLimit').value;
-    const duration = document.getElementById('duration').value;
+    const ageLimit = parseInt(document.getElementById('ageLimit').value);
+    const duration = parseInt(document.getElementById('duration').value)
 
     if (!title || !category || !ageLimit || !duration) {
         alert('Udfyld venligst alle felter.');
