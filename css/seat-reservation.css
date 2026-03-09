@@ -213,3 +213,43 @@ footer p {
         grid-template-columns: repeat(6, 55px);
     }
 }
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popupboks {
+    background-color: white;
+    color: black;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.3);
+    text-align: left;
+}
+
+.popupboks h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.popup-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.popup-footer button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}

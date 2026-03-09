@@ -10,6 +10,13 @@ const selectedSeatsText = document.getElementById("selectedSeatsText"); // Hente
 const btnCreateReservation = document.getElementById("btnCreateReservation"); // Henter knappen der laver reservationen
 const resultMessage = document.getElementById("resultMessage"); // Henter feltet hvor reservationsbeskeden vises
 
+const confirmationPopup = document.getElementById("confirmationPopup"); // Popup baggrund
+
+const popupShowing = document.getElementById("popupShowing"); // Viser showing i popup
+const popupPhone = document.getElementById("popupPhone"); // Viser telefonnummer i popup
+const popupSeats = document.getElementById("popupSeats"); // Viser valgte sæder i popup
+const popupOkBtn = document.getElementById("popupOkBtn"); // OK-knap i popup
+
 let selectedSeatIds = []; // Liste af sædeID'er som man har valgt
 let currentShowingId = null; // gemmer showing ID'et man har tastet
 
@@ -158,8 +165,18 @@ btnCreateReservation.addEventListener("click", function () { // Kører når man 
         })
         .then(function (message) {
             resultMessage.textContent = message; // viser svar fra backend
+
+            popupShowing.textContent = currentShowingId; // viser showing id
+            popupPhone.textContent = phoneNr; // viser telefonnummer
+            popupSeats.textContent = selectedSeatIds.join(", "); // viser valgte sæder
+
+            confirmationPopup.style.display = "flex"; // viser popup
         })
         .catch(function () {
             resultMessage.textContent = "Fejl ved oprettelse af reservation";
         });
+});
+
+    popupOkBtn.addEventListener("click", function () {
+    window.location.href = "index.html";
 });
