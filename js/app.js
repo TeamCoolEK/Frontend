@@ -1,3 +1,6 @@
+//Backend URL
+const API_BASE = "http://localhost:8080";
+
 //Her finder vi HTML elementet hvor den aktuelle dato skal vises
 const currentDateEl = document.getElementById("currentDate");
 //Her finder vi containeren hvor filmvisninger skal indsættes
@@ -25,7 +28,7 @@ async function loadShowings() {
     const date = formatDate(currentDate);
 
     //Kalder backend endpoint med den valgte dato
-    const res = await fetch(`/api/showings?date=${date}`);
+    const res = await fetch(API_BASE + "/showByDate?date=" + date);
 
     //Konverterer response fra JSON til JavasCript objekt
     const showings = await res.json();
@@ -41,6 +44,8 @@ async function loadShowings() {
 
     //Loop, igennem alle showings der kommer fra backend
     showings.forEach(showing => {
+        //Tjekker at showing bliver vist korrekt
+        console.log(showing);
 
         //Opretter et nyt div  element til hver film
         const div = document.createElement("div");
@@ -48,15 +53,34 @@ async function loadShowings() {
         //tilføjer en CSS klasse til styling
         div.classList.add("movie-card");
 
+        //formatter start tid, så der kun vises klokkeslæt
+        const start = new Date(showing.startTime);
+        const formattedTime = start.getHours().toString().padStart(2, '0')
+                                    + ":" + start.getMinutes().toString().padStart(2, '0');
+
         //indsætter filmens information i HTML - Template strings (${ }) bruges til at indsætte data
         div.innerHTML = `
-            <h3>${showing.movieTitle}</h3>
-            <p>Tid: ${showing.time}</p>
-            <p>Sal: ${showing.room}</p>
+            <h3>${showing.movie.title}</h3>
+            <p>Tid: ${formattedTime}</p>
+            <p>Sal: ${showing.theatre.name}</p>
         `;
 
-        //Tilføjer filmkortet til containeren i HTML
+        //eventlistner til at klikke på showing og komme videre til sæde reservation
+        div.addEventListener("click", async () => {
+            try {
+                // Sender API-kald til backend med showing id
+                const res = await fetch(API_BASE + "/showings/" + showing.id + "/available-seats");
+                // Konventere API-kald til json
+                const details = await res.json();
 
+                // Navigere til showing HTML
+                window.location.href = "showing.html";
+            } catch (error) {
+                console.error("Fejl ved hentning af showing:", error);
+            }
+        })
+
+        //Tilføjer filmkortet til containeren i HTML
         movieContainer.appendChild(div);
     });
 }
