@@ -66,19 +66,10 @@ async function loadShowings() {
         `;
 
         //eventlistner til at klikke på showing og komme videre til sæde reservation
-        div.addEventListener("click", async () => {
-            try {
-                // Sender API-kald til backend med showing id
-                const res = await fetch(API_BASE + "/showings/" + showing.id + "/available-seats");
-                // Konventere API-kald til json
-                const details = await res.json();
-
-                // Navigere til showing HTML
-                window.location.href = "showing.html";
-            } catch (error) {
-                console.error("Fejl ved hentning af showing:", error);
-            }
-        })
+        div.addEventListener("click", () => {
+            // Naviger til showing.html med showingId som query parameter
+            window.location.href = `showing.html?showingId=${showing.id}`;
+        });
 
         //Tilføjer filmkortet til containeren i HTML
         movieContainer.appendChild(div);

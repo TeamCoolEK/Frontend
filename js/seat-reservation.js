@@ -20,6 +20,16 @@ const popupOkBtn = document.getElementById("popupOkBtn"); // OK-knap i popup
 let selectedSeatIds = []; // Liste af sædeID'er som man har valgt
 let currentShowingId = null; // gemmer showing ID'et man har tastet
 
+//Henter showingId fra window.location.search, som bliver gemt fra index.html, når en showing vælges (app.js)
+const params = new URLSearchParams(window.location.search);
+const showingIdFromUrl = params.get("showingId");
+
+if (showingIdFromUrl) {
+    inpShowingId.value = showingIdFromUrl; // sætter værdien i inputfeltet
+    currentShowingId = showingIdFromUrl;   // gemmer showingId
+    loadAvailableSeats(showingIdFromUrl);  // henter sæder automatisk
+}
+
 btnLoadSeats.addEventListener("click", function () { // Kører når man trykker på "hentsæder"
     const showingId = inpShowingId.value; // Henter det man taster ind
 
@@ -40,7 +50,7 @@ function loadAvailableSeats(showingId) { // funktion som henter ledige sæder fr
     statusText.textContent = "Henter sæder...";
     seatGrid.innerHTML = "";
 
-    fetch(API_BASE + "/showings/" + showingId + "/available-seats") // Sender GET request til backend
+    fetch(API_BASE + `/showings/${showingId}/available-seats`) // Sender GET request til backend
         .then(function (response) {
             if (!response.ok) {
                 throw new Error("Fejl ved hentning af sæder");
