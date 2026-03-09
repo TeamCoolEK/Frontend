@@ -2,6 +2,7 @@ const API_BASE = "http://localhost:8080";
 // Backend URL
 
 const inpShowingId = document.getElementById("showingId"); // Henter inputfeltet hvor brugeren skriver showing id
+const inpPhoneNr = document.getElementById("phoneNr"); // Henter inputfeltet hvor brugeren skriver telefonnummer
 const btnLoadSeats = document.getElementById("btnLoadSeats"); // Henter knappen der skal hente sæder
 const seatGrid = document.getElementById("seatGrid"); // Henter området hvor sæde-knapperne skal vises
 const statusText = document.getElementById("statusText"); // Henter tekstfeltet hvor statusbeskeder vises
@@ -12,7 +13,7 @@ const resultMessage = document.getElementById("resultMessage"); // Henter feltet
 let selectedSeatIds = []; // Liste af sædeID'er som man har valgt
 let currentShowingId = null; // gemmer showing ID'et man har tastet
 
-btnLoadSeats.addEventListener("click", function () { // Kører functionen når man trykker på "hentsæder"
+btnLoadSeats.addEventListener("click", function () { // Kører når man trykker på "hentsæder"
     const showingId = inpShowingId.value; // Henter det man taster ind
 
     if (showingId === "" || showingId < 1) { // Tjekker om input feltet er gyldigt
@@ -22,19 +23,10 @@ btnLoadSeats.addEventListener("click", function () { // Kører functionen når m
 
     currentShowingId = showingId; // Gemmer showingID
     selectedSeatIds = []; // Nulstiller tidligere valgte sæder
-    selectedSeatsText.textContent = ""; // Tømmer tekstfeltet med de valgte sæder
+    selectedSeatsText.textContent = "Ingen"; // Tømmer tekstfeltet med de valgte sæder
     resultMessage.textContent = ""; // Tømmer reservationsbeskeden
 
-    loadAvailableSeats(showingId); // kalder på den funktion som hhenter ledige sæder fra vores backend
-});
-
-btnCreateReservation.addEventListener("click", function () {
-    if (currentShowingId == null || selectedSeatIds.length === 0) {
-        return;
-    }
-
-    resultMessage.textContent =
-        "Tak for reservationen.";
+    loadAvailableSeats(showingId); // kalder på den funktion som henter ledige sæder fra vores backend
 });
 
 function loadAvailableSeats(showingId) { // funktion som henter ledige sæder fra backend
@@ -48,40 +40,126 @@ function loadAvailableSeats(showingId) { // funktion som henter ledige sæder fr
             }
             return response.json();
         })
-        .then(function (seats) { // modtager liste af sæder
-            if (seats.length === 0) { // tjekker om der er ledige sæder
+        .then(function (availableSeats) { // modtager liste af ledige sæder
+            if (availableSeats.length === 0) {
                 statusText.textContent = "Ingen ledige sæder fundet";
                 return;
             }
 
             statusText.textContent = "Vælg sæder";
 
-            for (let i = 0; i < seats.length; i++) { // Gennemgår alle sæder i listen
-                const seat = seats[i]; // Gemmer valgte sæde i en variable
-
-                const button = document.createElement("button"); //Laver knap til sædet
-                button.textContent = "Række " + seat.rowNo + " Sæde " + seat.seatNo; // Skriver række og sæde nr. på knappen
-
-                button.addEventListener("click", function () { // Kører når man trykker på et sæde
-                    toggleSeat(seat.id); // Tilføjer eller fjerner sldet fra listen af valgte sæder
-                });
-
-                seatGrid.appendChild(button); // tilføjer knap til HTML
-            }
+            renderAllSeats(availableSeats); // viser alle 240 sæder
         })
         .catch(function () {
             statusText.textContent = "Kunne ikke hente sæder";
         });
 }
 
-function toggleSeat(seatId) { // Funktion som vælger eller fravælger sæde
+function renderAllSeats(availableSeats) { // laver alle sæder
+    seatGrid.innerHTML = "";
+
+    let maxRow = 0;
+    let maxSeatNo = 0;
+
+    // finder største række og største sædenummer
+    for (let i = 0; i < availableSeats.length; i++) {
+        if (availableSeats[i].rowNo > maxRow) {
+            maxRow = availableSeats[i].rowNo;
+        }
+
+        if (availableSeats[i].seatNo > maxSeatNo) {
+            maxSeatNo = availableSeats[i].seatNo;
+        }
+    }
+
+    // sætter grid så det passer til salen
+    seatGrid.style.gridTemplateColumns = "repeat(" + maxSeatNo + ", 55px)";
+
+    for (let row = 1; row <= maxRow; row++) {
+        for (let seatNo = 1; seatNo <= maxSeatNo; seatNo++) {
+
+            let foundSeat = null;
+
+            for (let i = 0; i < availableSeats.length; i++) {
+                if (availableSeats[i].rowNo === row && availableSeats[i].seatNo === seatNo) {
+                    foundSeat = availableSeats[i];
+                    break;
+                }
+            }
+
+            const button = document.createElement("button");
+            button.textContent = row + "-" + seatNo;
+            button.classList.add("seat");
+
+            if (foundSeat !== null) {
+                // sædet er ledigt
+                button.classList.add("available");
+                button.dataset.seatId = foundSeat.id;
+
+                button.addEventListener("click", function () {
+                    toggleSeat(foundSeat.id, button);
+                });
+            } else {
+                // sædet er reserveret
+                button.classList.add("reserved");
+                button.disabled = true;
+            }
+
+            seatGrid.appendChild(button);
+        }
+    }
+}
+
+function toggleSeat(seatId, button) { // Funktion som vælger eller fravælger sæde
     const index = selectedSeatIds.indexOf(seatId); // finder sædets placering i liste over valgte sæder
 
     if (index === -1) { // hvis sædet ikke er valgt i forvejen
         selectedSeatIds.push(seatId); // tilføjer sædet til liste
+        button.classList.remove("available");
+        button.classList.add("selected");
     } else {
         selectedSeatIds.splice(index, 1); // hvis sædet allerede er valgt fjernes det fra listen
+        button.classList.remove("selected");
+        button.classList.add("available");
     }
 
-    selectedSeatsText.textContent = "Valgte sæder: " + selectedSeatIds.join(", "); // Viser ens valgte sæder som tekst
+    if (selectedSeatIds.length === 0) {
+        selectedSeatsText.textContent = "Ingen";
+    } else {
+        selectedSeatsText.textContent = "Valgte sæder: " + selectedSeatIds.join(", "); // Viser ens valgte sæder som tekst
+    }
 }
+
+btnCreateReservation.addEventListener("click", function () { // Kører når man trykker på "Create Reservation"
+    if (currentShowingId == null || selectedSeatIds.length === 0) {
+        resultMessage.textContent = "Vælg mindst ét sæde";
+        return;
+    }
+
+    const phoneNr = inpPhoneNr.value; // Henter telefonnummer fra input
+
+    if (phoneNr === "") {
+        resultMessage.textContent = "Skriv telefonnummer";
+        return;
+    }
+
+    // Bygger URL til POST request
+    let url = API_BASE + "/reservations?showingId=" + currentShowingId + "&phoneNr=" + phoneNr;
+
+    for (let i = 0; i < selectedSeatIds.length; i++) { // tilføjer alle sædeID'er til request
+        url += "&seatIds=" + selectedSeatIds[i];
+    }
+
+    fetch(url, {
+        method: "POST"
+    })
+        .then(function (response) {
+            return response.text();
+        })
+        .then(function (message) {
+            resultMessage.textContent = message; // viser svar fra backend
+        })
+        .catch(function () {
+            resultMessage.textContent = "Fejl ved oprettelse af reservation";
+        });
+});
