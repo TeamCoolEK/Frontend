@@ -1,37 +1,57 @@
 <!DOCTYPE html>
 <html lang="da">
-
 <head>
   <meta charset="UTF-8">
   <title>Sædereservation</title>
-
-  <!-- CSS -->
   <link rel="stylesheet" href="../css/seat-reservation.css">
 </head>
-
 <body>
 
-<h1>Sædereservation</h1>
+<nav class="navbar">
+  <div class="navbar-left">
+    <a href="#" class="logo">Kino</a>
+  </div>
+  <div class="navbar-right">
+    <a href="#">Forside</a>
+    <a href="#">Program</a>
+    <a href="#">Reservationer</a>
+  </div>
+</nav>
 
-<label for="showingId">Showing ID:</label>
-<input id="showingId" type="number">
-<button id="btnLoadSeats">Hent ledige sæder</button>
+<main>
+  <h1>Sædereservation</h1>
 
-<p id="statusText"></p>
+  <div class="form-box">
+    <label for="showingId">Showing ID:</label>
+    <input id="showingId" type="number">
+    <button id="btnLoadSeats">Hent sæder</button>
+  </div>
 
-<h2>Ledige sæder</h2>
-<div id="seatGrid"></div>
+  <p id="statusText"></p>
 
-<p>
-  Valgte sæder:
-  <span id="selectedSeatsText">Ingen</span>
-</p>
+  <div id="cinema">
+    <div id="screen">BIOGRAF SKÆRM</div>
+    <div id="seatGrid"></div>
+  </div>
 
-<button id="btnCreateReservation" disabled>Create Reservation</button>
+  <p>
+    Valgte sæder:
+    <span id="selectedSeatsText">Ingen</span>
+  </p>
 
-<p id="resultMessage"></p>
+  <div class="form-box">
+    <label for="phoneNr">Telefonnummer:</label>
+    <input id="phoneNr" type="text">
+    <button id="btnCreateReservation">Create Reservation</button>
+  </div>
+
+  <p id="resultMessage"></p>
+</main>
+
+<footer>
+  <p>Kino system</p>
+</footer>
 
 <script src="../js/seat-reservation.js"></script>
-
 </body>
 </html>
