@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin page</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+
+<h1>Admin side til at oprette og redigere film og forestilligner</h1>
+
+<div class="actions-grid">
+    <div class="action-card" onclick="openPopup('moviePopup')">
+        <h3>Opret Film</h3>
+        <p>Tilføj en ny film til systemet med titel, genre, aldersgrænse og varighed i minutter.</p>
+        <button class="btn-create btn-gold">+ Opret Film</button>
+    </div>
+    <div class="action-card red" onclick="openPopup('showingPopup')">
+        <h3>Opret Visning</h3>
+        <p>Planlæg en ny forestilling ved at vælge film, sal, dato og starttidspunkt.</p>
+        <button class="btn-create btn-red">+ Opret Visning</button>
+    </div>
+</div>
+
+<!-- Popup til create movie -->
+<div class="overlay" id="moviePopup">
+    <div class="popupboks">
+        <h2>Opret ny film</h2>
+
+        <div class="form-group">
+            <label for="title">Titel</label>
+            <input type="text" id="title" placeholder="f.eks. Barbie" maxlength="50">
+        </div>
+
+        <div class="form-group">
+            <label for="category">Kategori</label>
+            <select id="category">
+                <option value="">– Vælg –</option>
+                <option value="1">Science Fiction</option>
+                <option value="2">Action</option>
+                <option value="3">Drama</option>
+                <option value="4">Komedie</option>
+                <option value="5">Thriller</option>
+                <option value="6">Animation</option>
+                <option value="7">Horror</option>
+            </select>
+            </div>
+
+        <div class="form-group">
+            <label for="ageLimit">Aldersgrænse</label>
+            <select id="ageLimit">
+                <option value="">– Vælg –</option>
+                <option value="0">Alle aldre</option>
+                <option value="7">7+</option>
+                <option value="11">11+</option>
+                <option value="15">15+</option>
+                <option value="18">18+</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="duration">Varighed (minutter)</label>
+            <input type="number" id="duration" placeholder="f.eks. 120" min="1" max="999">
+        </div>
+
+        <div class="popup-footer">
+            <button class="btn-cancel" onclick="closePopup('moviePopup')">Annullér</button>
+            <button class="btn-submit" onclick="createMovie()">Opret film</button>
+        </div>
+    </div>
+</div>
+
+<!-- Tabel til liste af filmene i systemet -->
+<h2>Film i systemet</h2>
+<table id="moviesTable">
+    <thead>
+    <tr>
+        <th>Titel</th>
+        <th>Kategori</th>
+        <th>Aldersgrænse</th>
+        <th>Varighed</th>
+    </tr>
+    </thead>
+    <tbody id="moviesTableBody">
+    </tbody>
+</table>
+
+<h2>Visninger i systemet</h2>
+<table id="showingsTable" >
+<thead>
+<tr>
+    <th>Film</th>
+    <th>Sal</th>
+    <th>Dato</th>
+    <th>Starttidspunkt</th>
+</tr>
+</thead>
+    <tbody id="showingsTableBody">
+    </tbody>
+</table>
+
+
+</body>
+<script src="../js/admin.js"></script>
+</html>
