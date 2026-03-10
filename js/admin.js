@@ -42,6 +42,7 @@ async function getMovies() {
             <td>${movie.category ? movie.category.name : '–'}</td> 
             <td>${movie.ageLimit}+</td>
             <td>${movie.duration} min</td>
+            <td><button onclick="deleteMovie(${movie.id})">Slet film</button></td>
         `;
         // Tilføjer den færdige række til tabellen i HTML'en
         tbody.appendChild(row);
@@ -209,3 +210,18 @@ document.addEventListener('DOMContentLoaded', getShowings);
 //Lytter til movieSelect og startime, for at udrenge endtime til showing
 document.getElementById("movieSelect").addEventListener("change", calculateEndTime);
 document.getElementById("startTime").addEventListener("change", calculateEndTime);
+
+//Slet film fra tabellen og databsen
+async function deleteMovie(id) {
+    if (!confirm('Er du sikker på at du vil slette filmen?')) return;
+
+    const response = await fetch(`http://localhost:8080/deletemovie/${id}`, {
+        method: 'DELETE'
+    });
+
+    if (response.ok) {
+        await getMovies();
+    } else {
+        alert('Noget gik galt. Prøv igen.');
+    }
+}
