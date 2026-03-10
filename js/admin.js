@@ -1,17 +1,12 @@
 const urlPost = 'http://localhost:8080/createmovie';
 const urlGet  = 'http://localhost:8080/allmovies';
 
-const GetShowingsAPI = "http://localhost:8080/admin/showallshowings";
-const PostShowingsAPI = "http://localhost:8080/admin/addshowing";
+const GetShowingsAPI = "http://localhost:8080/showallshowings";
+const PostShowingsAPI = "http://localhost:8080/addshowing";
 
 // Åbn popup
 function openPopup(id) {
-    document.getElementById(id).classList.add('active');
-}
-
-// Åben popup (Showings)
-function openShowingPopup(id) {
-    loadMovies();
+    loadMovies(); //til at hente film til create showing
     document.getElementById(id).classList.add('active');
 }
 
@@ -170,6 +165,13 @@ function calculateEndTime() {
     });
 
     document.getElementById("endTime").value = endTime;
+}
+
+//Reset create showing formular
+function resetMovieFomular () {
+    const movieId = document.getElementById("movieSelect").value;
+    const theatreId = document.getElementById("theatreSelect").value;
+    const startTime = document.getElementById("startTime").value;
 }
 
 //Create showing!
