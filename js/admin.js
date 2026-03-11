@@ -1,5 +1,5 @@
 const urlPost = 'http://localhost:8080/createmovie';
-const urlGet  = 'http://localhost:8080/admin/movies';
+const urlGet  = 'http://localhost:8080/allmovies';
 
 const GetShowingsAPI = "http://localhost:8080/showallshowings";
 const PostShowingsAPI = "http://localhost:8080/addshowing";
