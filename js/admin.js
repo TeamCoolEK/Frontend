@@ -1,5 +1,5 @@
 const urlPost = 'http://localhost:8080/createmovie';
-const urlGet  = 'http://localhost:8080/allmovies';
+const urlGet  = 'http://localhost:8080/admin/movies';
 
 const GetShowingsAPI = "http://localhost:8080/showallshowings";
 const PostShowingsAPI = "http://localhost:8080/addshowing";
@@ -37,11 +37,16 @@ async function getMovies() {
     movies.forEach(movie => {
         // Opretter en ny <tr> (tabelrække) i hukommelsen
         const row = document.createElement('tr');
+
+        const performanceText = movie.underperforming ? "Dårlig" : "God";
+        const performanceColor = movie.underperforming ? "red" : "green";
+
         row.innerHTML = `
             <td>${movie.title}</td>
             <td>${movie.category ? movie.category.name : '–'}</td> 
             <td>${movie.ageLimit}+</td>
             <td>${movie.duration} min</td>
+            <td style="color:${performanceColor}; font-weight:bold;"> ${performanceText}</td>
             <td><button onclick="deleteMovie(${movie.id})">Slet film</button></td>
         `;
         // Tilføjer den færdige række til tabellen i HTML'en
@@ -261,7 +266,7 @@ document.getElementById("startTime").addEventListener("change", calculateEndTime
 async function deleteMovie(id) {
     if (!confirm('Er du sikker på at du vil slette filmen?')) return;
 
-    const response = await fetch(`http://localhost:8080/deletemovie/${id}`, {
+    const response = await fetch(`http://localhost:8080/admin/movie/${id}`, {
         method: 'DELETE'
     });
 
