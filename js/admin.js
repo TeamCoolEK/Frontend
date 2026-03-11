@@ -65,6 +65,7 @@ async function getShowings () {
         const dateTime = showing.startTime; //Date time gemt i variabel
         const [date, time] = dateTime.split("T"); //Splitter date og time ved T og gemmer det i array
         const timeOnly = time.substring(0,5); //Fjerner sekunder fra time (Henter kun de første 5 indexer i string hh:mm)
+        const endTimeOnly = showing.endTime.substring(0,5);
 
         //opretter ny række i tBody pr showing
         const row = document.createElement('tr');
@@ -72,7 +73,8 @@ async function getShowings () {
             <td>${showing.movie.title}</td>
             <td>${showing.theatre.name}</td>
             <td>${date}</td>
-            <td>${timeOnly}</td>
+            <td>${timeOnly} - ${endTimeOnly}</td>
+            <td><button onclick="deleteShowing(${showing.id})">Slet Forestilling</button></td>
         `;
         //tilføjer tækker til tabel
         tBody.appendChild(row);
@@ -146,6 +148,23 @@ async function loadMovies() {
     });
 }
 
+//beregner EndTime Værdi til brug i create Showing og beregning af den i real tid.
+function calculateEndTimeValue(startTime, duration) {
+
+    const start = new Date(startTime);
+    const end = new Date(startTime);
+
+    end.setMinutes(end.getMinutes() + parseInt(duration));
+
+    // Hvis datoen ændrer sig → filmen går over midnat
+    if (start.getDate() !== end.getDate()) {
+        alert("Filmen kan ikke slutte efter kl. 23:59")
+        throw new Error("Filmen kan ikke slutte efter kl. 23:59");
+    }
+
+    return end.toTimeString().split(" ")[0]; // HH:mm:ss
+}
+
 //Beregner slut tidspunkt
 function calculateEndTime() {
 
@@ -156,14 +175,16 @@ function calculateEndTime() {
 
     if (!startTime || !duration) return;
 
-    const start = new Date(startTime);
+    // const start = new Date(startTime);
+    //
+    // start.setMinutes(start.getMinutes() + parseInt(duration));
+    //
+    // const endTime = start.toLocaleString("da-DK", {
+    //     dateStyle: "short",
+    //     timeStyle: "short"
+    // });
 
-    start.setMinutes(start.getMinutes() + parseInt(duration));
-
-    const endTime = start.toLocaleString("da-DK", {
-        dateStyle: "short",
-        timeStyle: "short"
-    });
+    const endTime = calculateEndTimeValue(startTime, duration);
 
     document.getElementById("endTime").value = endTime;
 }
@@ -179,23 +200,48 @@ function resetMovieFomular () {
 async function createShowing() {
 
     const movieId = document.getElementById("movieSelect").value;
+    console.log(movieId);
     const theatreId = document.getElementById("theatreSelect").value;
+    console.log(theatreId)
     const startTime = document.getElementById("startTime").value;
+    console.log(startTime)
 
-    const showing = {
-        movieId: movieId,
-        theatreId: theatreId,
-        startTime: startTime
-    };
+    //Variabel til filmens længde i minutter
+    const duration = movieSelect.selectedOptions[0]?.dataset.duration;
 
-    await fetch(PostShowingsAPI, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(showing)
+    let endTime = null;
+
+    //Hvis vi både har en start time og en længde af film
+    if (startTime && duration) {
+        endTime = calculateEndTimeValue(startTime, duration);
+    }
+
+    console.log(endTime);
+
+    if (!movieId || !theatreId || !startTime || !endTime) {
+        alert('Udfyld venligst alle felter.');
+        return;
+    }
+
+    // Sender en HTTP request til backend (http://localhost:8080/createmovie)
+    const response = await fetch(PostShowingsAPI, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            movie: { id: movieId },
+            theatre: { id: theatreId},
+            startTime,
+            endTime
+            /* category sendes som objekt med id, så Spring Boot kan finde den i databasen
+            i stedet for at prøve at oprette en ny */
+        })
     });
 
+    if (!response.ok) {
+        const error = await response.text();
+        alert(error);
+        return;
+    }
     closePopup("showingPopup");
 
     await getShowings(); // opdater tabel
@@ -221,6 +267,21 @@ async function deleteMovie(id) {
 
     if (response.ok) {
         await getMovies();
+    } else {
+        alert('Noget gik galt. Prøv igen.');
+    }
+}
+
+//Slet showing fra tabellen og database
+async function deleteShowing(id) {
+    if (!confirm('Er du sikker på at du vil slette forestillingen?')) return;
+
+    const response = await fetch(`http://localhost:8080/deleteshowing/${id}`, {
+        method: 'DELETE'
+    });
+
+    if (response.ok) {
+        await getShowings();
     } else {
         alert('Noget gik galt. Prøv igen.');
     }
