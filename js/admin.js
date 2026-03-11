@@ -1,8 +1,12 @@
 const urlPost = 'http://localhost:8080/createmovie';
 const urlGet  = 'http://localhost:8080/admin/movies';
 
+const GetShowingsAPI = "http://localhost:8080/showallshowings";
+const PostShowingsAPI = "http://localhost:8080/addshowing";
+
 // Åbn popup
 function openPopup(id) {
+    loadMovies(); //til at hente film til create showing
     document.getElementById(id).classList.add('active');
 }
 
@@ -50,6 +54,38 @@ async function getMovies() {
     });
 }
 
+//Henter alle showings i tabellen
+async function getShowings () {
+    const response = await fetch (GetShowingsAPI);
+    const showings = await response.json();
+
+    //Henter tabel til showings fra DOM
+    const tBody = document.getElementById('showingsTableBody');
+
+    //Fjerner gammel data fra tabel (ingen dupletter)
+    tBody.innerHTML = '';
+
+    //Looper gennem showings og tilføjer dem til tabel
+    showings.forEach(showing => {
+        const dateTime = showing.startTime; //Date time gemt i variabel
+        const [date, time] = dateTime.split("T"); //Splitter date og time ved T og gemmer det i array
+        const timeOnly = time.substring(0,5); //Fjerner sekunder fra time (Henter kun de første 5 indexer i string hh:mm)
+        const endTimeOnly = showing.endTime.substring(0,5);
+
+        //opretter ny række i tBody pr showing
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${showing.movie.title}</td>
+            <td>${showing.theatre.name}</td>
+            <td>${date}</td>
+            <td>${timeOnly} - ${endTimeOnly}</td>
+            <td><button onclick="deleteShowing(${showing.id})">Slet Forestilling</button></td>
+        `;
+        //tilføjer tækker til tabel
+        tBody.appendChild(row);
+    })
+}
+
 //Ryd formular efter film er oprettet
 function resetMovieForm() {
     document.getElementById('title').value = '';
@@ -95,9 +131,136 @@ async function createMovie() {
     }
 }
 
+//Henter movies til showing (til option i stedet for tabel)
+async function loadMovies() {
+    const response = await fetch(urlGet);
+    const movies = await response.json();
+
+    //henter movieSelect fra DOM
+    const movieSelect = document.getElementById("movieSelect");
+    movieSelect.innerHTML = '<option value="">– Vælg film –</option>';
+    //looper igennem alle film
+    movies.forEach(movie => {
+        //laver en ny option ud fra hvert film element
+        const option = document.createElement("option");
+        option.value = movie.id;
+        option.textContent = movie.title;
+
+        // gemmer varighed i option
+        option.dataset.duration = movie.duration;
+
+        movieSelect.appendChild(option);
+    });
+}
+
+//beregner EndTime Værdi til brug i create Showing og beregning af den i real tid.
+function calculateEndTimeValue(startTime, duration) {
+
+    const start = new Date(startTime);
+    const end = new Date(startTime);
+
+    end.setMinutes(end.getMinutes() + parseInt(duration));
+
+    // Hvis datoen ændrer sig → filmen går over midnat
+    if (start.getDate() !== end.getDate()) {
+        alert("Filmen kan ikke slutte efter kl. 23:59")
+        throw new Error("Filmen kan ikke slutte efter kl. 23:59");
+    }
+
+    return end.toTimeString().split(" ")[0]; // HH:mm:ss
+}
+
+//Beregner slut tidspunkt
+function calculateEndTime() {
+
+    const movieSelect = document.getElementById("movieSelect");
+    const startTime = document.getElementById("startTime").value;
+
+    const duration = movieSelect.selectedOptions[0]?.dataset.duration;
+
+    if (!startTime || !duration) return;
+
+    // const start = new Date(startTime);
+    //
+    // start.setMinutes(start.getMinutes() + parseInt(duration));
+    //
+    // const endTime = start.toLocaleString("da-DK", {
+    //     dateStyle: "short",
+    //     timeStyle: "short"
+    // });
+
+    const endTime = calculateEndTimeValue(startTime, duration);
+
+    document.getElementById("endTime").value = endTime;
+}
+
+//Reset create showing formular
+function resetMovieFomular () {
+    const movieId = document.getElementById("movieSelect").value;
+    const theatreId = document.getElementById("theatreSelect").value;
+    const startTime = document.getElementById("startTime").value;
+}
+
+//Create showing!
+async function createShowing() {
+
+    const movieId = document.getElementById("movieSelect").value;
+    console.log(movieId);
+    const theatreId = document.getElementById("theatreSelect").value;
+    console.log(theatreId)
+    const startTime = document.getElementById("startTime").value;
+    console.log(startTime)
+
+    //Variabel til filmens længde i minutter
+    const duration = movieSelect.selectedOptions[0]?.dataset.duration;
+
+    let endTime = null;
+
+    //Hvis vi både har en start time og en længde af film
+    if (startTime && duration) {
+        endTime = calculateEndTimeValue(startTime, duration);
+    }
+
+    console.log(endTime);
+
+    if (!movieId || !theatreId || !startTime || !endTime) {
+        alert('Udfyld venligst alle felter.');
+        return;
+    }
+
+    // Sender en HTTP request til backend (http://localhost:8080/createmovie)
+    const response = await fetch(PostShowingsAPI, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            movie: { id: movieId },
+            theatre: { id: theatreId},
+            startTime,
+            endTime
+            /* category sendes som objekt med id, så Spring Boot kan finde den i databasen
+            i stedet for at prøve at oprette en ny */
+        })
+    });
+
+    if (!response.ok) {
+        const error = await response.text();
+        alert(error);
+        return;
+    }
+    closePopup("showingPopup");
+
+    await getShowings(); // opdater tabel
+}
+
+
 /* Kør når siden er loaded. Altså når browseren har indlæst og bygget hele HTML'en færdig er getMovies
 funktionen der skal køre når det er */
 document.addEventListener('DOMContentLoaded', getMovies);
+document.addEventListener('DOMContentLoaded', getShowings);
+
+//Lytter til movieSelect og startime, for at udrenge endtime til showing
+document.getElementById("movieSelect").addEventListener("change", calculateEndTime);
+document.getElementById("startTime").addEventListener("change", calculateEndTime);
 
 //Slet film fra tabellen og databsen
 async function deleteMovie(id) {
@@ -109,6 +272,21 @@ async function deleteMovie(id) {
 
     if (response.ok) {
         await getMovies();
+    } else {
+        alert('Noget gik galt. Prøv igen.');
+    }
+}
+
+//Slet showing fra tabellen og database
+async function deleteShowing(id) {
+    if (!confirm('Er du sikker på at du vil slette forestillingen?')) return;
+
+    const response = await fetch(`http://localhost:8080/deleteshowing/${id}`, {
+        method: 'DELETE'
+    });
+
+    if (response.ok) {
+        await getShowings();
     } else {
         alert('Noget gik galt. Prøv igen.');
     }

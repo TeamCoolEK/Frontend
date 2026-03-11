@@ -10,6 +10,10 @@ const selectedSeatsText = document.getElementById("selectedSeatsText"); // Hente
 const btnCreateReservation = document.getElementById("btnCreateReservation"); // Henter knappen der laver reservationen
 const resultMessage = document.getElementById("resultMessage"); // Henter feltet hvor reservationsbeskeden vises
 
+const movieTitle = document.getElementById("movieTitle");
+const movieAgeLimit = document.getElementById("movieAgeLimit");
+const movieDuration = document.getElementById("movieDuration");
+
 const confirmationPopup = document.getElementById("confirmationPopup"); // Popup baggrund
 
 const popupShowing = document.getElementById("popupShowing"); // Viser showing i popup
@@ -19,6 +23,7 @@ const popupOkBtn = document.getElementById("popupOkBtn"); // OK-knap i popup
 
 let selectedSeatIds = []; // Liste af sædeID'er som man har valgt
 let currentShowingId = null; // gemmer showing ID'et man har tastet
+let currentShowing = null;
 
 //Henter showingId fra window.location.search, som bliver gemt fra index.html, når en showing vælges (app.js)
 const params = new URLSearchParams(window.location.search);
@@ -27,6 +32,7 @@ const showingIdFromUrl = params.get("showingId");
 if (showingIdFromUrl) {
     inpShowingId.value = showingIdFromUrl; // sætter værdien i inputfeltet
     currentShowingId = showingIdFromUrl;   // gemmer showingId
+    loadShowingDetails(showingIdFromUrl);  // henter filmens detaljer
     loadAvailableSeats(showingIdFromUrl);  // henter sæder automatisk
 }
 
@@ -43,7 +49,8 @@ btnLoadSeats.addEventListener("click", function () { // Kører når man trykker 
     selectedSeatsText.textContent = "Ingen"; // Tømmer tekstfeltet med de valgte sæder
     resultMessage.textContent = ""; // Tømmer reservationsbeskeden
 
-    loadAvailableSeats(showingId); // kalder på den funktion som henter ledige sæder fra vores backend
+    loadShowingDetails(showingId); // henter filmens detaljer
+    loadAvailableSeats(showingId); // henter ledige sæder
 });
 
 function loadAvailableSeats(showingId) { // funktion som henter ledige sæder fra backend
@@ -174,13 +181,20 @@ btnCreateReservation.addEventListener("click", function () { // Kører når man 
             return response.text();
         })
         .then(function (message) {
-            resultMessage.textContent = message; // viser svar fra backend
+            resultMessage.textContent = message;
 
-            popupShowing.textContent = currentShowingId; // viser showing id
-            popupPhone.textContent = phoneNr; // viser telefonnummer
-            popupSeats.textContent = selectedSeatIds.join(", "); // viser valgte sæder
+            const start = new Date(currentShowing.startTime);
 
-            confirmationPopup.style.display = "flex"; // viser popup
+            const formattedTime =
+                start.getHours().toString().padStart(2, '0') +
+                ":" +
+                start.getMinutes().toString().padStart(2, '0');
+
+            popupShowing.textContent = currentShowing.movie.title + " - " + formattedTime;
+            popupPhone.textContent = phoneNr;
+            popupSeats.textContent = selectedSeatIds.join(", ");
+
+            confirmationPopup.style.display = "flex";
         })
         .catch(function () {
             resultMessage.textContent = "Fejl ved oprettelse af reservation";
@@ -191,3 +205,19 @@ btnCreateReservation.addEventListener("click", function () { // Kører når man 
     window.location.href = "index.html";
 });
 
+function loadShowingDetails(showingId) {
+
+    fetch(API_BASE + "/showings/" + showingId)
+
+        .then(response => response.json())
+
+        .then(showing => {
+
+            currentShowing = showing; // gem showing
+
+            movieTitle.textContent = showing.movie.title;
+            movieAgeLimit.textContent = showing.movie.ageLimit;
+            movieDuration.textContent = showing.movie.duration;
+
+        });
+}

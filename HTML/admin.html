@@ -19,9 +19,9 @@
         <button class="btn-create btn-gold">+ Opret Film</button>
     </div>
     <div class="action-card red" onclick="openPopup('showingPopup')">
-        <h3>Opret Visning</h3>
+        <h3>Opret Forestilling</h3>
         <p>Planlæg en ny forestilling ved at vælge film, sal, dato og starttidspunkt.</p>
-        <button class="btn-create btn-red">+ Opret Visning</button>
+        <button class="btn-create btn-red">+ Opret Forestilling</button>
     </div>
 </div>
 
@@ -72,6 +72,44 @@
     </div>
 </div>
 
+<!-- pop up til create showing -->
+<div class="overlay" id="showingPopup">
+    <div class="popupboks">
+        <h2>Opret ny forestilling</h2>
+
+        <div class="form-group">
+            <label for="movieSelect">Film</label>
+            <select id="movieSelect">
+                <option value="">– Vælg film –</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="theatreSelect">Sal</label>
+            <select id="theatreSelect">
+                <option value="">– Vælg sal –</option>
+                <option value="1">Sal 1</option>
+                <option value="2">Sal 2</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="startTime">Start tidspunkt</label>
+            <input type="datetime-local" id="startTime">
+        </div>
+
+        <div class="form-group">
+            <label for="endTime">Slut tidspunkt</label>
+            <input type="text" id="endTime" readonly>
+        </div>
+
+        <div class="popup-footer">
+            <button class="btn-cancel" onclick="closePopup('showingPopup')">Annullér</button>
+            <button class="btn-submit" onclick="createShowing()">Opret forestilling</button>
+        </div>
+    </div>
+</div>
+
 <!-- Tabel til liste af filmene i systemet -->
 <h2>Film i systemet</h2>
 <table id="moviesTable">
@@ -89,14 +127,16 @@
     </tbody>
 </table>
 
-<h2>Visninger i systemet</h2>
+<!-- tabel til visninger af alle showings -->
+<h2>Forestillinger i systemet</h2>
 <table id="showingsTable" >
 <thead>
 <tr>
     <th>Film</th>
     <th>Sal</th>
     <th>Dato</th>
-    <th>Starttidspunkt</th>
+    <th>Tid</th>
+    <th>Slet forestilling</th>
 </tr>
 </thead>
     <tbody id="showingsTableBody">
