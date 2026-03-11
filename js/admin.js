@@ -167,7 +167,7 @@ function calculateEndTimeValue(startTime, duration) {
         throw new Error("Filmen kan ikke slutte efter kl. 23:59");
     }
 
-    return end.toTimeString().split(" ")[0]; // HH:mm:ss
+    return end.toISOString().slice(0, 19); // iso string (yyyy-MM-ddTHH:mm:ss)
 }
 
 //Beregner slut tidspunkt
