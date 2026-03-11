@@ -70,7 +70,7 @@ async function getShowings () {
         const dateTime = showing.startTime; //Date time gemt i variabel
         const [date, time] = dateTime.split("T"); //Splitter date og time ved T og gemmer det i array
         const timeOnly = time.substring(0,5); //Fjerner sekunder fra time (Henter kun de første 5 indexer i string hh:mm)
-        const endTimeOnly = showing.endTime.substring(0,5);
+        const endTimeOnly = showing.endTime.substring(11,16); //YYYY-MM-DDTHH:mm:ss
 
         //opretter ny række i tBody pr showing
         const row = document.createElement('tr');
