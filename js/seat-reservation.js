@@ -190,3 +190,4 @@ btnCreateReservation.addEventListener("click", function () { // Kører når man 
     popupOkBtn.addEventListener("click", function () {
     window.location.href = "index.html";
 });
+
