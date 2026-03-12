@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080/api/";
+const API_BASE = "http://79.76.53.11:8080";
 // Backend URL
 
 const inpShowingId = document.getElementById("showingId"); // Henter inputfeltet hvor brugeren skriver showing id
@@ -13,6 +13,7 @@ const resultMessage = document.getElementById("resultMessage"); // Henter feltet
 const movieTitle = document.getElementById("movieTitle");
 const movieAgeLimit = document.getElementById("movieAgeLimit");
 const movieDuration = document.getElementById("movieDuration");
+const movieImage = document.getElementById("movieImage"); //HTML element hvor filmens billede skal vises
 
 const confirmationPopup = document.getElementById("confirmationPopup"); // Popup baggrund
 
@@ -208,9 +209,7 @@ btnCreateReservation.addEventListener("click", function () { // Kører når man 
 function loadShowingDetails(showingId) {
 
     fetch(API_BASE + "/showings/" + showingId)
-
         .then(response => response.json())
-
         .then(showing => {
 
             currentShowing = showing; // gem showing
@@ -218,6 +217,13 @@ function loadShowingDetails(showingId) {
             movieTitle.textContent = showing.movie.title;
             movieAgeLimit.textContent = showing.movie.ageLimit;
             movieDuration.textContent = showing.movie.duration;
+
+            if (showing.movie.imageData){
+                movieImage.src = showing.movie.imageData; // Sætter billedets src til Base64 data fra databasen
+                movieImage.style.display = "block"; // Viser billedet hvis der findes et
+            } else {
+                movieImage.style.display = "none"; // Skjuler billedfeltet hvis filmen ikke har et billede
+            }
 
         });
 }

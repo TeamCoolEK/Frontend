@@ -1,10 +1,12 @@
-const urlPost = 'http://localhost:8080/api/createmovie';
-const urlGet  = 'http://localhost:8080/api/allmovies';
+const urlPost = 'http://79.76.53.11:8080/createmovie';
+const urlGet  = 'http://79.76.53.11:8080/allmovies';
 
-const GetShowingsAPI = "http://localhost:8080/api/showallshowings";
-const PostShowingsAPI = "http://localhost:8080/api/addshowing";
+const GetShowingsAPI = "http://79.76.53.11:8080/showallshowings";
+const PostShowingsAPI = "http://79.76.53.11:8080/addshowing";
 
-const GetReservations="http://localhost:8080/allreservations";
+const GetReservations="http://79.76.53.11:8080/allreservations";
+
+const movieImageInput = document.getElementById("movieImage");
 
 // Åbn popup
 function openPopup(id) {
@@ -94,6 +96,22 @@ function resetMovieForm() {
     document.getElementById('category').value = '';
     document.getElementById('ageLimit').value = '';
     document.getElementById('duration').value = '';
+    document.getElementById('movieImage').value = '';
+}
+
+function convertImageToBase64(file){
+    return new Promise(function (resolve, reject){
+        const reader = new FileReader(); // Laver FileReader objekt som browseren bruger til at læse filer
+
+        reader.onload = function (){ // Når filen er læst returneres resultatet.
+            resolve(reader.result); // Base64 stengen
+        }
+
+        reader.onerror = function (){
+            reject("Fejl ved billede upload");
+        }
+        reader.readAsDataURL(file); // Laver data-URL om til Base64-streng!!!!
+    })
 }
 
 //Opret film
@@ -102,11 +120,24 @@ async function createMovie() {
     const categoryId = parseInt(document.getElementById('category').value);
     const ageLimit   = parseInt(document.getElementById('ageLimit').value);
     const duration   = parseInt(document.getElementById('duration').value);
+    const imageFile = document.getElementById("movieImage").files[0];     // Henter den valgte billedfil fra inputfeltet
 
     if (!title || !categoryId || !ageLimit || !duration) {
         alert('Udfyld venligst alle felter.');
         return;
     }
+
+    let imageData = "";// Tom streng som bruges hvis der ikke vælges et billede
+
+    if (imageFile){
+        try{
+            imageData = await convertImageToBase64(imageFile); // Konverterer billedet til Base64 før det sendes til backend
+        } catch (error){
+            alert("Kunne ikke læse billedet");
+            return;
+        }
+    }
+
 
     // Sender en HTTP request til backend (http://localhost:8080/createmovie)
     const response = await fetch(urlPost, {
@@ -116,6 +147,7 @@ async function createMovie() {
             title,
             ageLimit,
             duration,
+            imageData,
             category: { id: categoryId }
             /* category sendes som objekt med id, så Spring Boot kan finde den i databasen
             i stedet for at prøve at oprette en ny */

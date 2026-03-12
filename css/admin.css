@@ -1,182 +1,373 @@
+/* =========================
+   ADMIN.CSS
+   Admin side
+   ========================= */
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
-/*  GENERELT  */
+:root {
+    --bg: #f4f4f6;
+    --surface: #ffffff;
+    --surface-2: #f9fafb;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #dcdfe4;
+    --dark: #202020;
+    --dark-2: #2d2d2d;
+    --accent: #e8b14a;
+    --accent-hover: #d8a03c;
+    --danger: #c0392b;
+    --danger-hover: #a93226;
+    --success: #1f9d55;
+    --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.10);
+    --radius: 14px;
+    --max-width: 1450px;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
-    margin: 2rem;
-    background-color: #f5f5f5;
-    color: #222;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* =========================
+   PAGE LAYOUT
+   ========================= */
+
+h1,
+h2 {
+    width: min(var(--max-width), calc(100% - 3rem));
+    margin-left: auto;
+    margin-right: auto;
 }
 
 h1 {
-    margin-bottom: 2rem;
-    font-size: 1.6rem;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    line-height: 1.2;
 }
 
+h2 {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.3rem;
+}
 
-/* ACTION CARDS (opret film / opret visning) */
+/* =========================
+   ACTION CARDS
+   ========================= */
+
 .actions-grid {
+    width: min(var(--max-width), calc(100% - 3rem));
+    margin: 0 auto 2rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
-    margin-bottom: 3rem;
 }
 
 .action-card {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
     padding: 1.5rem;
     cursor: pointer;
-    transition: box-shadow 0.2s, transform 0.2s;
+    box-shadow: var(--shadow-sm);
+    transition: 0.22s ease;
 }
 
 .action-card:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
 }
 
 .action-card h3 {
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
 }
 
 .action-card p {
-    color: #666;
-    font-size: 0.875rem;
+    margin: 0 0 1rem;
+    color: var(--muted);
     line-height: 1.5;
-    margin-bottom: 1rem;
 }
 
-/* Knapper på action cards */
-.btn-create {
-    display: inline-block;
-    padding: 0.5rem 1.1rem;
+.action-card.red {
+    border-left: 5px solid var(--danger);
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+button {
     border: none;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
+    border-radius: 10px;
+    padding: 0.72rem 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: 0.2s ease;
 }
 
-.btn-create:hover {
-    opacity: 0.85;
-}
-
-.btn-gold {
-    background-color: #e8b14a;
+.btn-create,
+.btn-submit {
+    background: var(--accent);
     color: #111;
 }
 
+.btn-create:hover,
+.btn-submit:hover {
+    background: var(--accent-hover);
+}
+
 .btn-red {
-    background-color: #c0392b;
+    background: var(--danger);
     color: white;
 }
 
+.btn-red:hover {
+    background: var(--danger-hover);
+}
 
-/* OVERLAY – det mørke lag bag popup */
+.btn-cancel {
+    background: white;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
 
-/* Skjult som standard */
+.btn-cancel:hover {
+    background: #f3f4f6;
+}
+
+/* slet-knapper i tabeller */
+table button {
+    background: var(--danger);
+    color: white;
+    padding: 0.55rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+}
+
+table button:hover {
+    background: var(--danger-hover);
+}
+
+/* =========================
+   POPUP
+   ========================= */
+
 .overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 100;
+    background: rgba(17, 24, 39, 0.62);
+    z-index: 1000;
     justify-content: center;
     align-items: center;
+    padding: 1rem;
 }
 
-/* Vises når JS tilføjer klassen 'active' */
 .overlay.active {
     display: flex;
 }
 
-
-/*popupboks*/
 .popupboks {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
+    background: var(--surface);
     width: 100%;
-    max-width: 460px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    border-radius: 18px;
+    box-shadow: var(--shadow-md);
+    padding: 1.5rem;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .popupboks h2 {
-    margin-bottom: 1.4rem;
-    font-size: 1.3rem;
+    width: 100%;
+    margin: 0 0 1.25rem;
+    font-size: 1.35rem;
 }
 
-
-/* FORMULAR FELTER */
 .form-group {
     margin-bottom: 1rem;
 }
 
 .form-group label {
     display: block;
-    font-weight: 600;
-    font-size: 0.85rem;
-    margin-bottom: 0.3rem;
-    color: #444;
+    margin-bottom: 0.35rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
 }
 
 .form-group input,
 .form-group select {
     width: 100%;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    box-sizing: border-box;
-    transition: border-color 0.2s;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    font-size: 0.96rem;
+    color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #e8b14a;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232, 177, 74, 0.18);
 }
 
-
-/* --- POPUP FOOTER (knapper) --- */
 .popup-footer {
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
-    margin-top: 1.5rem;
+    margin-top: 1.4rem;
     padding-top: 1rem;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #ececec;
 }
 
-.btn-cancel {
-    padding: 0.5rem 1.2rem;
-    border: 1px solid #ccc;
+/* =========================
+   TABLE WRAPPERS
+   ========================= */
+
+/* Giver alle tabeller samme udseende */
+#moviesTable,
+#showingsTable,
+#reservationsTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
     background: white;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.15s;
 }
 
-.btn-cancel:hover {
-    background: #f0f0f0;
+/* wrapper-effekt direkte på tabel */
+#moviesTable,
+#showingsTable,
+#reservationsTable {
+    display: block;
+    width: min(var(--max-width), calc(100% - 3rem));
+    margin: 0 auto 2rem;
+    overflow: auto;
+    max-height: 320px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    background: var(--surface);
 }
 
-.btn-submit {
-    padding: 0.5rem 1.2rem;
-    background: #e8b14a;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.2s;
+/* behold tabellen læsbar */
+#moviesTable thead,
+#showingsTable thead,
+#reservationsTable thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
-.btn-submit:hover {
-    opacity: 0.85;
+#moviesTable thead tr,
+#showingsTable thead tr,
+#reservationsTable thead tr {
+    background: #f3f4f6;
 }
 
+#moviesTable th,
+#moviesTable td,
+#showingsTable th,
+#showingsTable td,
+#reservationsTable th,
+#reservationsTable td {
+    padding: 0.95rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eceff3;
+    white-space: nowrap;
+}
+
+#moviesTable th,
+#showingsTable th,
+#reservationsTable th {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--text);
+}
+
+#moviesTable td,
+#showingsTable td,
+#reservationsTable td {
+    font-size: 0.94rem;
+    color: #374151;
+    background: white;
+}
+
+#moviesTable tbody tr:hover td,
+#showingsTable tbody tr:hover td,
+#reservationsTable tbody tr:hover td {
+    background: #fafafa;
+}
+
+/* scrollbar lidt pænere */
+#moviesTable::-webkit-scrollbar,
+#showingsTable::-webkit-scrollbar,
+#reservationsTable::-webkit-scrollbar,
+.popupboks::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+#moviesTable::-webkit-scrollbar-thumb,
+#showingsTable::-webkit-scrollbar-thumb,
+#reservationsTable::-webkit-scrollbar-thumb,
+.popupboks::-webkit-scrollbar-thumb {
+    background: #c8ccd3;
+    border-radius: 10px;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+    h1,
+    h2,
+    .actions-grid,
+    #moviesTable,
+    #showingsTable,
+    #reservationsTable {
+        width: calc(100% - 1.5rem);
+    }
+
+    h1 {
+        font-size: 1.6rem;
+        margin-top: 1.2rem;
+    }
+
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .popupboks {
+        padding: 1rem;
+        max-width: 100%;
+    }
+
+    .popup-footer {
+        flex-direction: column;
+    }
+
+    .popup-footer button {
+        width: 100%;
+    }
+}
