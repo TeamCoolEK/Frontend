@@ -1,10 +1,10 @@
-const urlPost = 'http://79.76.53.11:8080/createmovie';
-const urlGet  = 'http://79.76.53.11:8080/allmovies';
+const urlPost = '/api/createmovie';
+const urlGet  = '/api/allmovies';
 
-const GetShowingsAPI = "http://79.76.53.11:8080/showallshowings";
-const PostShowingsAPI = "http://79.76.53.11:8080/addshowing";
+const GetShowingsAPI = "/api/showallshowings";
+const PostShowingsAPI = "/api/addshowing";
 
-const GetReservations="http://79.76.53.11:8080/allreservations";
+const GetReservations="/api/allreservations";
 
 const movieImageInput = document.getElementById("movieImage");
 
