@@ -1,8 +1,10 @@
-const urlPost = 'http://localhost:8080/createmovie';
-const urlGet  = 'http://localhost:8080/allmovies';
+const urlPost = 'http://localhost:8080/api/createmovie';
+const urlGet  = 'http://localhost:8080/api/allmovies';
 
-const GetShowingsAPI = "http://localhost:8080/showallshowings";
-const PostShowingsAPI = "http://localhost:8080/addshowing";
+const GetShowingsAPI = "http://localhost:8080/api/showallshowings";
+const PostShowingsAPI = "http://localhost:8080/api/addshowing";
+
+const GetReservations="http://localhost:8080/allreservations";
 
 const movieImageInput = document.getElementById("movieImage");
 
@@ -322,4 +324,43 @@ async function deleteShowing(id) {
     } else {
         alert('Noget gik galt. Prøv igen.');
     }
+
 }
+
+//henter data fra backend
+async function getReservations() {
+    //sender get requst til url i toppen og venter på svar fra backend før den fortsætter
+    const response = await fetch(GetReservations);
+    //konverter JSON til JavaScript aray af reservation objekter
+    const reservations = await response.json();
+
+    //finder <tbody id="reservationsTableBody"> elementet i HTML'en
+    const tbody = document.getElementById('reservationsTableBody');
+   //Rydder tabellen så vi ike får dubletter
+    tbody.innerHTML = '';
+
+    //løber igennem hvert reservation objekt i arrayet (som vi konverteret før)
+    reservations.forEach(reservation => {
+
+        // Gemmer de tre felter i lokale variabler så de er nemme at tilgå
+        const customer = reservation.customer;
+        const showing = reservation.showing;
+        const seatReservations = reservation.seatReservations;
+
+        //opretter ny tabelrække
+        const row = document.createElement('tr');
+
+        //? betyder -> hvis feltes findes vis værdien ellers vis '-'
+        //length tæller antal sæder i resrvationen
+        row.innerHTML = `
+         <td>${customer ? customer.name : '–'}</td>
+            <td>${customer ? customer.phoneNr : '–'}</td>
+            <td>${showing ? showing.movie.title : '–'}</td>
+            <td>${seatReservations ? seatReservations.length : '–'}</td> 
+            <td>${showing ? showing.startTime.substring(0, 16).replace('T', ' ') : '–'}</td>
+        `; //substring(0, 16).replace('T', ' ') formaterer 2026-03-06T18:00:00 til 2026-03-06 18:00.
+        tbody.appendChild(row); //tilføjer den færdige række til tabellen i HTML'en'
+    });
+}
+//Kører getReservations funktionen når hele HTML siden er indlæst færdigt.
+document.addEventListener('DOMContentLoaded', getReservations);
