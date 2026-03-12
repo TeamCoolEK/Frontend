@@ -1,7 +1,7 @@
 # Laver et image af en nginx server, som kopiere frontend mappen og conf, til brug i nginx serveren.
 FROM nginx:alpine
 # Kopiere nginx.conf filen ind i vores image
-COPY nginx-dev.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 #Kopiere hele frontend mappen til nginx
 COPY index/ /usr/share/nginx/html/
 COPY js/ /usr/share/nginx/html/js/
