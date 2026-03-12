@@ -60,10 +60,11 @@ async function loadShowings() {
 
         //indsætter filmens information i HTML - Template strings (${ }) bruges til at indsætte data
         div.innerHTML = `
-            <h3>${showing.movie.title}</h3>
-            <p>Tid: ${formattedTime}</p>
-            <p>Sal: ${showing.theatre.name}</p>
-        `;
+        ${showing.movie.imageData ? `<img src="${showing.movie.imageData}" alt="${showing.movie.title}" class="movie-poster">` : ""}
+        <h3>${showing.movie.title}</h3>
+        <p>Tid: ${formattedTime}</p>
+        <p>Sal: ${showing.theatre.name}</p>
+`;
 
         //eventlistner til at klikke på showing og komme videre til sæde reservation
         div.addEventListener("click", () => {
