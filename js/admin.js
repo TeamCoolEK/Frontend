@@ -1,8 +1,8 @@
-const urlPost = 'http://localhost:8080/createmovie';
-const urlGet  = 'http://localhost:8080/allmovies';
+const urlPost = 'http://localhost:8080/api/createmovie';
+const urlGet  = 'http://localhost:8080/api/allmovies';
 
-const GetShowingsAPI = "http://localhost:8080/showallshowings";
-const PostShowingsAPI = "http://localhost:8080/addshowing";
+const GetShowingsAPI = "http://localhost:8080/api/showallshowings";
+const PostShowingsAPI = "http://localhost:8080/api/addshowing";
 
 const GetReservations="http://localhost:8080/allreservations";
 
