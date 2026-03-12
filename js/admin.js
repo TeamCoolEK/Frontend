@@ -127,7 +127,7 @@ async function createMovie() {
         return;
     }
 
-    let imageData = "";     // Tom streng bruges hvis der ikke vælges et billede
+    let imageData = "";// Tom streng som bruges hvis der ikke vælges et billede
 
     if (imageFile){
         try{
