@@ -1,142 +1,187 @@
-*, *:before, *:after {
+/* =========================
+   SEAT-RESERVATION.CSS
+   Showing / sædereservation
+   ========================= */
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
+}
+
+:root {
+    --bg: #f4f4f6;
+    --surface: #ffffff;
+    --surface-2: #f8f8fa;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #dcdfe4;
+    --dark: #202020;
+    --dark-2: #2d2d2d;
+    --accent: #e8b14a;
+    --accent-hover: #d79f34;
+    --green: #1f9d55;
+    --blue: #2563eb;
+    --red: #dc2626;
+    --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.12);
+    --radius: 16px;
+    --max-width: 1300px;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
 }
 
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-/* navbar / header */
-.navbar {
-    background-color: #2d2d2d;
-    color: #fff;
-    padding: 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+    flex-direction: column;
 }
 
-.navbar-left .logo {
-    font-size: 2rem;
-    font-weight: bold;
-    text-decoration: none;
-    color: #f0f0f0;
-}
+/* =========================
+   MAIN
+   ========================= */
 
-.navbar-right a {
-    text-decoration: none;
-    color: #f0f0f0;
-    padding: 0.625rem;
-    margin-left: 0.9375rem;
-    border: 2px solid transparent;
-    border-radius: 0.25rem;
-    transition: background-color 0.3s, border-color 0.3s;
-}
-
-.navbar-right a:hover {
-    background-color: #f0f0f0;
-    color: #2d2d2d;
-    border-color: #2d2d2d;
-}
-
-/* main */
 main {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.25rem;
 }
 
 h1 {
-    margin-bottom: 1.25rem;
+    margin: 0 0 1.5rem;
+    font-size: 2rem;
+    text-align: center;
 }
 
-.form-box {
-    margin-bottom: 1rem;
+/* =========================
+   MOVIE INFO
+   ========================= */
+
+.movie-info {
+    width: 100%;
+    max-width: 800px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
 }
 
-label {
-    font-weight: bold;
-    margin-right: 0.5rem;
+.movie-info img {
+    width: 100%;
+    max-width: 260px;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 16px;
+    display: block;
+    margin: 0 auto 1rem;
+    box-shadow: var(--shadow-sm);
 }
 
-input {
-    padding: 0.625rem;
+.movie-info h2 {
+    margin: 0.5rem 0 0.8rem;
+    font-size: 1.6rem;
+}
+
+.movie-info p {
+    margin: 0.35rem 0;
+    color: var(--muted);
     font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    margin-right: 0.5rem;
 }
 
-button {
-    padding: 0.625rem 1.25rem;
-    font-size: 1rem;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-button:hover {
-    background-color: #2d2d2d;
-    color: #fff;
-}
+/* =========================
+   STATUS / SELECTED TEXT
+   ========================= */
 
 #statusText,
-#resultMessage,
-#selectedSeatsText {
-    margin: 0.75rem 0;
+#selectedSeatsText,
+#resultMessage {
+    width: 100%;
+    max-width: 800px;
+    margin: 0.5rem auto;
+    text-align: center;
     font-size: 1rem;
+    font-weight: 600;
 }
 
-/* cinema area */
+#selectedSeatsText {
+    color: var(--text);
+}
+
+/* =========================
+   CINEMA AREA
+   ========================= */
+
 #cinema {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
     width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: var(--shadow-md);
+    padding: 2rem 1rem;
+    margin: 1rem 0 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-x: auto;
 }
 
 #screen {
-    width: 500px;
-    max-width: 90%;
+    width: min(700px, 90%);
     margin-bottom: 2rem;
     padding: 1rem;
-    background-color: #eaeaea;
+    background: linear-gradient(180deg, #ececec, #dcdcdc);
     color: #111;
-    font-weight: bold;
+    font-weight: 800;
+    letter-spacing: 1px;
     text-align: center;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.25);
+    border-radius: 14px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 }
 
 #seatGrid {
     display: grid;
-    gap: 0.625rem;
+    gap: 0.6rem;
     justify-content: center;
+    min-width: fit-content;
+    padding: 0.5rem;
 }
 
-/* seat buttons */
+/* =========================
+   SEATS
+   ========================= */
+
 .seat {
     width: 55px;
     height: 55px;
     border: none;
-    border-radius: 12px 12px 8px 8px;
+    border-radius: 14px 14px 10px 10px;
     color: white;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 700;
     cursor: pointer;
     position: relative;
-    font-weight: bold;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16);
 }
 
-/* armlæn */
+.seat:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
 .seat::before,
 .seat::after {
     content: "";
@@ -157,99 +202,188 @@ button:hover {
 }
 
 .available {
-    background-color: green;
+    background-color: var(--green);
 }
 
 .selected {
-    background-color: blue;
+    background-color: var(--blue);
 }
 
 .reserved {
-    background-color: red;
+    background-color: var(--red);
     cursor: not-allowed;
+    opacity: 0.92;
 }
 
-/* footer */
-footer {
-    background-color: #2d2d2d;
-    color: #fff;
-    text-align: center;
-    padding: 1.25rem;
-    margin-top: 2rem;
-    box-shadow: 0 -0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+/* =========================
+   FORM
+   ========================= */
+
+.form-box {
+    width: 100%;
+    max-width: 700px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
-footer p {
+label {
+    font-weight: 700;
+    color: var(--text);
+}
+
+input {
+    padding: 0.8rem 0.9rem;
     font-size: 1rem;
-    margin: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    min-width: 220px;
+    background: white;
+    color: var(--text);
 }
 
-/* responsive */
-@media (max-width: 768px) {
-    .navbar-left .logo {
-        font-size: 1.5rem;
-    }
-
-    .navbar {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .form-box {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: center;
-    }
-
-    input,
-    button {
-        width: 100%;
-        max-width: 280px;
-        margin-right: 0;
-    }
-
-    #seatGrid {
-        grid-template-columns: repeat(6, 55px);
-    }
+input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232, 177, 74, 0.18);
 }
+
+button {
+    border: none;
+    border-radius: 10px;
+    padding: 0.8rem 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--accent);
+    color: #111;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    background: var(--accent-hover);
+}
+
+/* =========================
+   POPUP
+   ========================= */
 
 .overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    inset: 0;
+    background: rgba(17, 24, 39, 0.62);
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    padding: 1rem;
 }
 
 .popupboks {
-    background-color: white;
-    color: black;
+    background: white;
+    color: var(--text);
     padding: 1.5rem;
-    border-radius: 0.5rem;
-    width: 400px;
-    max-width: 90%;
-    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.3);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: var(--shadow-md);
     text-align: left;
 }
 
 .popupboks h2 {
     margin-top: 0;
+    margin-bottom: 1rem;
     text-align: center;
+}
+
+.popupboks p {
+    margin: 0.7rem 0;
+    line-height: 1.5;
 }
 
 .popup-footer {
     display: flex;
     justify-content: center;
-    margin-top: 1rem;
+    margin-top: 1.2rem;
 }
 
 .popup-footer button {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
+    min-width: 120px;
+}
+
+/* =========================
+   FOOTER
+   ========================= */
+
+footer {
+    background: linear-gradient(135deg, #202020, #2e2e2e);
+    color: white;
+    text-align: center;
+    padding: 1.4rem 1rem;
+    margin-top: auto;
+}
+
+footer p {
+    margin: 0.3rem 0;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+    main {
+        padding: 1.2rem 0.8rem 2rem;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .movie-info {
+        padding: 1rem;
+    }
+
+    .movie-info h2 {
+        font-size: 1.3rem;
+    }
+
+    .form-box {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-box label {
+        text-align: center;
+    }
+
+    input,
+    button {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .seat {
+        width: 44px;
+        height: 44px;
+        font-size: 0.62rem;
+    }
+
+    .seat::before,
+    .seat::after {
+        height: 22px;
+        top: 8px;
+    }
+
+    #screen {
+        font-size: 0.95rem;
+    }
 }
