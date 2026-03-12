@@ -1,5 +1,5 @@
 //Backend URL
-const API_BASE = "http://79.76.53.11:8080";
+const API_BASE = "/api";
 
 //Her finder vi HTML elementet hvor den aktuelle dato skal vises
 const currentDateEl = document.getElementById("currentDate");
