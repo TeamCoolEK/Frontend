@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080";
+const API_BASE = "http://79.76.53.11:8080";
 // Backend URL
 
 const inpShowingId = document.getElementById("showingId"); // Henter inputfeltet hvor brugeren skriver showing id
