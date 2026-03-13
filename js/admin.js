@@ -1,8 +1,10 @@
 const urlPost = '/api/createmovie';
 const urlGet  = '/api/allmovies';
+const urlDelete = '/api/deletemovie/'
 
 const GetShowingsAPI = "/api/showallshowings";
 const PostShowingsAPI = "/api/addshowing";
+const DeleteShowingAPI = "/api/deleteshowing/";
 
 const GetReservations="/api/allreservations";
 
@@ -300,7 +302,7 @@ document.getElementById("startTime").addEventListener("change", calculateEndTime
 async function deleteMovie(id) {
     if (!confirm('Er du sikker på at du vil slette filmen?')) return;
 
-    const response = await fetch(`http://localhost:8080/admin/movie/${id}`, {
+    const response = await fetch(urlDelete + `${id}`, {
         method: 'DELETE'
     });
 
@@ -315,7 +317,7 @@ async function deleteMovie(id) {
 async function deleteShowing(id) {
     if (!confirm('Er du sikker på at du vil slette forestillingen?')) return;
 
-    const response = await fetch(`http://localhost:8080/deleteshowing/${id}`, {
+    const response = await fetch(DeleteShowingAPI + `${id}`, {
         method: 'DELETE'
     });
 
