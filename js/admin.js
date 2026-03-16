@@ -7,6 +7,7 @@ const PostShowingsAPI = "/api/addshowing";
 const DeleteShowingAPI = "/api/deleteshowing/";
 
 const GetReservations="/api/allreservations";
+const DeleteReservationAPI ="/api/deletereservation/";
 
 const movieImageInput = document.getElementById("movieImage");
 
@@ -360,9 +361,27 @@ async function getReservations() {
             <td>${showing ? showing.movie.title : '–'}</td>
             <td>${seatReservations ? seatReservations.length : '–'}</td> 
             <td>${showing ? showing.startTime.substring(0, 16).replace('T', ' ') : '–'}</td>
+            <td><button onclick="deleteReservation(${reservation.id})">Slet reservation</button></td>
         `; //substring(0, 16).replace('T', ' ') formaterer 2026-03-06T18:00:00 til 2026-03-06 18:00.
         tbody.appendChild(row); //tilføjer den færdige række til tabellen i HTML'en'
     });
 }
+
+//Slet reservation fra tabellen og database
+async function deleteReservation(id) {
+    if (!confirm('Er du sikker på at du vil slette reservationen?')) return;
+
+    const response = await fetch(DeleteReservationAPI + `${id}`, {
+        method: 'DELETE'
+    });
+
+    if (response.ok) {
+        await getReservations();
+    } else {
+        alert('Noget gik galt. Prøv igen.');
+    }
+
+}
+
 //Kører getReservations funktionen når hele HTML siden er indlæst færdigt.
 document.addEventListener('DOMContentLoaded', getReservations);
